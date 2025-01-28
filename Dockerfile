@@ -25,16 +25,17 @@ RUN apt-get update && apt-get upgrade -y && \
 # Add the new user to the sudoers file for privileged commands
 RUN echo "terminaluser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Install Gotty (for the web-based terminal)
+USER root
+RUN curl -L https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz | tar -xz && \
+    mv gotty /usr/local/bin/
+
 # Set the default user to 'terminaluser'
 USER terminaluser
 
 # Set the default shell to bash
 WORKDIR /home/terminaluser
 SHELL ["/bin/bash", "-c"]
-
-# Install Gotty (for the web-based terminal)
-RUN curl -L https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz | tar -xz && \
-    mv gotty /usr/local/bin/
 
 # Expose the default Gotty port
 EXPOSE 8080
