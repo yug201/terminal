@@ -1,0 +1,23 @@
+services:
+  - name: terminal-backend
+    type: web
+    env: python
+    buildCommand: ""
+    startCommand: python app.py
+    plan: free
+    disk:
+      sizeGB: 1
+    envVars:
+      - key: FLASK_ENV
+        value: production
+    rootDir: backend
+
+  - name: terminal-frontend
+    type: web
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    plan: free
+    disk:
+      sizeGB: 1
+    rootDir: frontend
