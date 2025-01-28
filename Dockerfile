@@ -34,10 +34,10 @@ SHELL ["/bin/bash", "-c"]
 
 # Install Gotty (for the web-based terminal)
 RUN curl -L https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz | tar -xz && \
-    sudo mv gotty /usr/local/bin/
+    mv gotty /usr/local/bin/
 
 # Expose the default Gotty port
 EXPOSE 8080
 
 # Run Gotty with --permit-write for an interactive terminal
-CMD ["gotty", "--permit-write", "--title-format", \"Interactive Terminal\", "--port", "8080", "bash"]
+CMD ["/usr/local/bin/gotty", "--permit-write", "--title-format", "Interactive Terminal", "--port", "8080", "bash"]
