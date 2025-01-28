@@ -1,15 +1,43 @@
-FROM ubuntu:22.04
+# Use the latest Ubuntu base image
+FROM ubuntu:latest
 
-# Install necessary tools
-RUN apt-get update && apt-get install -y bash curl wget nano vim && apt-get clean
+# Set a non-root user for safety
+RUN useradd -ms /bin/bash terminaluser
 
-# Install Gotty for web-based terminal access
-RUN wget -O gotty.tar.gz https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz && \
-    tar -xvf gotty.tar.gz && \
-    mv gotty /usr/local/bin/
+# Update the system and install necessary tools
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
+    sudo \
+    curl \
+    wget \
+    nano \
+    vim \
+    git \
+    build-essential \
+    python3 \
+    python3-pip \
+    zip \
+    unzip \
+    net-tools \
+    iputils-ping \
+    && apt-get clean
 
-# Expose port 8080
+# Add the new user to the sudoers file for privileged commands
+RUN echo "terminaluser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Set the default user to 'terminaluser'
+USER terminaluser
+
+# Set the default shell to bash
+WORKDIR /home/terminaluser
+SHELL ["/bin/bash", "-c"]
+
+# Install Gotty (for the web-based terminal)
+RUN curl -L https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz | tar -xz && \
+    sudo mv gotty /usr/local/bin/
+
+# Expose the default Gotty port
 EXPOSE 8080
 
-# Start Gotty (replace "bash" with the desired shell)
-CMD ["gotty", "--permit-write", "--port", "8080", "bash"]
+# Run Gotty with --permit-write for an interactive terminal
+CMD ["gotty", "--permit-write", "--title-format", \"Interactive Terminal\", "--port", "8080", "bash"]
