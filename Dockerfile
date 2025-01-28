@@ -1,10 +1,15 @@
 FROM ubuntu:22.04
 
-# Install basic tools
+# Install necessary tools
 RUN apt-get update && apt-get install -y bash curl wget nano vim && apt-get clean
 
-# Expose a dummy port (Render requires a port to keep the service alive)
+# Install Gotty for web-based terminal access
+RUN wget -O gotty.tar.gz https://github.com/yudai/gotty/releases/download/v1.0.1/gotty_linux_amd64.tar.gz && \
+    tar -xvf gotty.tar.gz && \
+    mv gotty /usr/local/bin/
+
+# Expose port 8080
 EXPOSE 8080
 
-# Start Bash
-CMD ["bash"]
+# Start Gotty (replace "bash" with the desired shell)
+CMD ["gotty", "--port", "8080", "bash"]
