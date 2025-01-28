@@ -12,4 +12,4 @@ RUN wget -O gotty.tar.gz https://github.com/yudai/gotty/releases/download/v1.0.1
 EXPOSE 8080
 
 # Start Gotty (replace "bash" with the desired shell)
-CMD ["gotty", "--port", "8080", "bash"]
+CMD ["gotty", "--permit-write", "--port", "8080", "bash"]
