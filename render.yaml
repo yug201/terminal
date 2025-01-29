@@ -1,9 +1,1 @@
-services:
-  - type: web
-    name: bash-ubuntu-terminal
-    env: docker
-    plan: free
-    dockerfilePath: ./Dockerfile
-    envVars:
-      - key: PORT
-        value: "8080"
+
